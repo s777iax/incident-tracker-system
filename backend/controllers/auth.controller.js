@@ -7,9 +7,9 @@ dotenv.config();
 
 export const signUp = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
+        const { email, password } = req.body;
 
-        if (!email || !password || !role) {
+        if (!email || !password) {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 
@@ -26,9 +26,9 @@ export const signUp = async (req, res) => {
 
         const result = await pool.query(
             `INSERT INTO users (email, password_hash, role)
-            VALUES ($1, $2, $3)
+            VALUES ($1, $2, 'user')
             RETURNING user_id, email, role`,
-            [email, hashedPassword, role || 'user']
+            [email, hashedPassword]
         )
 
         const token = jwt.sign(
