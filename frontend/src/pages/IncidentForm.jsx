@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+
 import { createIncident } from '../services/api.js';
 
 export default function IncidentForm() {
@@ -29,33 +31,39 @@ export default function IncidentForm() {
     };
 
     return (
-        <div>
-            <button onClick={() => navigate("/incidents")}>Back</button>
-            <form onSubmit={handleSubmit}>
-                <h2>Create Incident</h2>
-                <div>
-                    <label>Title: </label>
-                    <input
-                        type="text"
-                        placeholder="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Description: </label>
-                    <textarea
-                        placeholder="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    />
-                </div>
+        <div className="incident-form-page">
+            <div className="back-icon-container" onClick={() => navigate("/incidents")}>
+                <ArrowBackIosIcon
+                    className="icon" />
+                <p>Back</p>
+            </div>
+            <div className="incident-form-container">
+                <form onSubmit={handleSubmit}>
+                    <h2>New Incident</h2>
+                    <div className="incident-input-group">
+                        <p className="input-hint">Short summary of the incident</p>
+                        <input
+                            type="text"
+                            placeholder="Title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="incident-input-group">
+                        <p className="input-hint">Briefly describe the incident</p>
+                        <textarea
+                            placeholder="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                {error && <p>{error}</p>}
-                <button type="submit">Create Incident</button>
-            </form>
+                    {error && <p>{error}</p>}
+                    <button type="submit" className="action-btn">Create Incident</button>
+                </form>
+            </div>
         </div>
     );
 }

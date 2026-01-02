@@ -2,6 +2,9 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+
 import { getIncidentById, updateIncidentStatus, generateAiSummary } from '../services/api.js';
 
 export default function IncidentDetails() {
@@ -64,56 +67,61 @@ export default function IncidentDetails() {
     };
 
     return (
-        <div>
-            <button onClick={() => navigate("/incidents")}>Back</button>
+        <div className="incident-details-page">
+            <div className="back-icon-container" onClick={() => navigate("/incidents")}>
+                <ArrowBackIosIcon
+                    className="icon" />
+                <p>Back</p>
+            </div>
             <h1>Incident Report System</h1>
+            <div className='container'>
 
-            {!incidentDetails ? (
-                <p>Loading incident details...</p>
-            ) : (
-                <div
-                    style={{
-                        border: '1px solid #ccc',
-                        padding: '10px',
-                        margin: '10px 0'
-                    }}
-                >
-                    <h3>{incidentDetails.title}</h3>
-                    <p>Description: {incidentDetails.description}</p>
+                {!incidentDetails ? (
+                    <p>Loading incident details...</p>
+                ) : (
+                    <div className='incident-details-container'>
+                        <h3>{incidentDetails.title}</h3>
+                        <p>{incidentDetails.description}</p>
 
-                    <div>
-                        <strong>Status:</strong>{" "}
-                        {isAdmin ? (
-                            <select
-                                value={incidentDetails.status}
-                                onChange={(e) => handleStatusUpdate(e.target.value)}
-                            >
-                                {statusOptions.map((status) => (
-                                    <option key={status} value={status}>
-                                        {status}
-                                    </option>
-                                ))}
-                            </select>
-                        ) : (
-                            <span>{incidentDetails.status}</span>
+                        <div>
+                            <strong>Status:</strong>{" "}
+                            {isAdmin ? (
+                                <select
+                                    value={incidentDetails.status}
+                                    onChange={(e) => handleStatusUpdate(e.target.value)}
+                                >
+                                    {statusOptions.map((status) => (
+                                        <option key={status} value={status}>
+                                            {status}
+                                        </option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <span >{incidentDetails.status.replace("_", " ")}</span>
+                            )}                
+                        </div>
+                        <p className="text-date">{new Date(incidentDetails.created_at).toLocaleString()}</p>
+                        {successMessage && <p className="text-success">{successMessage}</p>}
+                        {isAdmin && (
+                            <>
+                                {incidentDetails.ai_summary ? (
+                                    <div className="ai-summary-section">
+                                        <AutoAwesomeIcon style={{ color: '#1976d2' }} />
+                                        <div className="ai-summary-details">
+                                            <p>{incidentDetails.ai_summary}</p>
+                                            <p className="text-ai-generate">AI Generated</p>
+                                        </div>
+                                    </div>
+                                ) : loading ? (
+                                    <p className="text-ai-generate">Generating AI summary...</p>
+                                ) : (
+                                    <button onClick={handleGenerateAiSummary} className="generate-btn"> Generate AI Summary</button>
+                                )}
+                            </>
                         )}
                     </div>
-
-                    <small>
-                        Created at:{" "}
-                        {new Date(incidentDetails.created_at).toLocaleString()}
-                    </small>
-
-                    {isAdmin &&
-                        (incidentDetails.ai_summary ?
-                            (<p>AI Summary: {incidentDetails.ai_summary}</p>) : (
-                                <button onClick={handleGenerateAiSummary}>Generate AI Summary</button>
-
-                            ))}
-                    {loading && <p>Generating AI summary...</p>}
-                    {successMessage && <p>{successMessage}</p>}
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }
