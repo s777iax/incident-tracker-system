@@ -62,6 +62,36 @@ incidentRouter.patch('/:id/status', requireAuth, requireAdmin, async (req, res) 
     }
 });
 
+incidentRouter.patch('/:id/severity', requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { severity } = req.body;
+
+        if (!severity) {
+            return res.status(400).json({ error: 'Severity is required' });
+        }
+
+        const allowedSeverities = ['LOW', 'MEDIUM', 'HIGH'];
+        if (!allowedSeverities.includes(severity)) {
+            return res.status(400).json({ error: 'Invalid severity value' });
+        }
+
+        const result = await pool.query(
+            `UPDATE incidents
+            SET severity = $1
+            WHERE incident_id = $2
+            RETURNING *`,
+            [severity, id]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Incident not found' });
+        }
+        res.status(200).json(result.rows[0]);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 incidentRouter.post('/:id/ai-summary', requireAuth, requireAdmin, async (req, res) => {
     try {
