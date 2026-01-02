@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-import { getIncidentById, updateIncidentStatus, generateAiSummary } from '../services/api.js';
+import { getIncidentById, updateIncidentStatus, updateIncidentSeverity, generateAiSummary } from '../services/api.js';
 
 export default function IncidentDetails() {
     const [incidentDetails, setIncidentDetails] = useState(null);
@@ -19,6 +19,7 @@ export default function IncidentDetails() {
     const { id } = useParams();
 
     const statusOptions = ['OPEN', 'IN_PROGRESS', 'RESOLVED'];
+    const severityOptions = ['LOW', 'MEDIUM', 'HIGH'];
 
     useEffect(() => {
         try {
@@ -48,6 +49,24 @@ export default function IncidentDetails() {
             setSuccessMessage("Status updated successfully.");
         } catch (error) {
             console.error("Error updating status:", error);
+        };
+    };
+
+    const handleSeverityUpdate = async (newSeverity) => {
+        try {
+            if (newSeverity === incidentDetails.severity) return;
+
+            setSuccessMessage(null);
+
+            await updateIncidentSeverity(id, newSeverity);
+            setIncidentDetails((prevDetails) => ({
+                ...prevDetails,
+                severity: newSeverity,
+            }));
+
+            setSuccessMessage("Severity updated successfully.");
+        } catch (error) {
+            console.error("Error updating severity:", error);
         };
     };
 
@@ -82,24 +101,38 @@ export default function IncidentDetails() {
                     <div className='incident-details-container'>
                         <h3>{incidentDetails.title}</h3>
                         <p>{incidentDetails.description}</p>
-
-                        <div>
-                            <strong>Status:</strong>{" "}
-                            {isAdmin ? (
-                                <select
-                                    value={incidentDetails.status}
-                                    onChange={(e) => handleStatusUpdate(e.target.value)}
-                                >
-                                    {statusOptions.map((status) => (
-                                        <option key={status} value={status}>
-                                            {status}
-                                        </option>
-                                    ))}
-                                </select>
-                            ) : (
-                                <span >{incidentDetails.status.replace("_", " ")}</span>
-                            )}                
-                        </div>
+                        {isAdmin ? (
+                            <div>
+                                <div>
+                                    <strong>Status:</strong>{" "}
+                                    <select
+                                        value={incidentDetails.status}
+                                        onChange={(e) => handleStatusUpdate(e.target.value)}
+                                    >
+                                        {statusOptions.map((status) => (
+                                            <option key={status} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <strong>Severity:</strong>{" "}
+                                    <select
+                                        value={incidentDetails.severity}
+                                        onChange={(e) => handleSeverityUpdate(e.target.value)}
+                                    >
+                                        {severityOptions.map((severity) => (
+                                            <option key={severity} value={severity}>
+                                                {severity}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        ) : (
+                            <span >{incidentDetails.status.replace("_", " ")}</span>
+                        )}
                         <p className="text-date">{new Date(incidentDetails.created_at).toLocaleString()}</p>
                         {successMessage && <p className="text-success">{successMessage}</p>}
                         {isAdmin && (
