@@ -99,6 +99,25 @@ export async function updateIncidentStatus(id, status) {
   return data;;
 }
 
+export async function updateIncidentSeverity(id, severity) {
+  const res = await fetch(`${API_URL}/incidents/${id}/severity`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify({ severity }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || 'Failed to update incident severity');
+  }
+  
+  return data;
+}
+
 export async function generateAiSummary(id) {
   const res = await fetch(`${API_URL}/incidents/${id}/ai-summary`, {
     method: 'POST',
