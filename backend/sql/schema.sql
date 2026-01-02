@@ -3,7 +3,7 @@ BEGIN;
 CREATE TABLE public.users (
 	user_id serial4 NOT NULL,
 	email varchar(100) NOT NULL,
-	"role" varchar(10) NOT NULL,
+	role varchar(10) NOT NULL,
 	password_hash text NOT NULL,
 
 	CONSTRAINT users_email_key UNIQUE (email),
@@ -15,13 +15,17 @@ CREATE TABLE public.incidents (
 	incident_id serial4 NOT NULL,
 	title varchar(50) NOT NULL,
 	description text NOT NULL,
-	status varchar(20) DEFAULT 'OPEN' NULL,
-	created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+	status varchar(20) NOT NULL DEFAULT 'OPEN',
+	severity varchar(10) NOT NULL DEFAULT 'LOW',
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP,
 	created_by int4 NOT NULL,
-	ai_summary text NULL,
+	ai_summary text,
 
 	CONSTRAINT incidents_pkey PRIMARY KEY (incident_id),
-	CONSTRAINT incidents_status_check CHECK (status IN ('OPEN', 'IN_PROGRESS', 'RESOLVED'))
+	CONSTRAINT incidents_status_check
+		CHECK (status IN ('OPEN', 'IN_PROGRESS', 'RESOLVED')),
+	CONSTRAINT incidents_severity_check
+		CHECK (severity IN ('LOW', 'MEDIUM', 'HIGH'))
 );
 
 ALTER TABLE public.incidents
