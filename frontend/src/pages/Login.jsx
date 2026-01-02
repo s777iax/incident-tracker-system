@@ -53,8 +53,8 @@ export default function Login() {
         <div className="login-page">
             <button onClick={handleSignUp} className="sign-up-btn">Sign Up</button>
             <div className="login-container">
+                <h2>Login</h2>
                 <form onSubmit={handleLogin}>
-                    <h2>Login</h2>
                     <div className="input-group">
                         <EmailOutlinedIcon
                             className="icon" />

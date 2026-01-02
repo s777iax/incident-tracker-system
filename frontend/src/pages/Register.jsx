@@ -52,8 +52,8 @@ export default function Register() {
         <div className="sign-up-page">
             <button onClick={handleLogin} className="login-btn">Login</button>
             <div className="sign-up-container">
+                <h2>Sign Up</h2>
                 <form onSubmit={handleRegister}>
-                    <h2>Register</h2>
                     <div className="input-group">
                         <EmailOutlinedIcon
                             className="icon" />
@@ -83,7 +83,7 @@ export default function Register() {
                         }
                     </div>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <button type="submit" className='action-btn'>Register</button>
+                    <button type="submit" className='action-btn'>Sign Up</button>
                 </form>
             </div>
         </div>

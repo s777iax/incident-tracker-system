@@ -92,9 +92,7 @@ export default function IncidentDetails() {
                     className="icon" />
                 <p>Back</p>
             </div>
-            <h1>Incident Report System</h1>
             <div className='container'>
-
                 {!incidentDetails ? (
                     <p>Loading incident details...</p>
                 ) : (

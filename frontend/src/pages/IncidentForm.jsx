@@ -38,8 +38,8 @@ export default function IncidentForm() {
                 <p>Back</p>
             </div>
             <div className="incident-form-container">
+                <h2>New Incident</h2>
                 <form onSubmit={handleSubmit}>
-                    <h2>New Incident</h2>
                     <div className="incident-input-group">
                         <p className="input-hint">Short summary of the incident</p>
                         <input
