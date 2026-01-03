@@ -211,6 +211,12 @@
     justify-content: space-between;
 }
 
+.text-status {
+    font-size: 16px;
+    font-weight: 600;
+    display: inline-block;
+}
+
 .severity {
     display: flex;
     align-items: center;
