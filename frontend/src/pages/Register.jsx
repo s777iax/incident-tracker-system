@@ -26,7 +26,7 @@ export default function Register() {
             const data = await register(email, password);
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            window.location.href = "/incidents";
+            window.location.replace("/incidents");
         } catch (error) {
             setError(error.message);
         }

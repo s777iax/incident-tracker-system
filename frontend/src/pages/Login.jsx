@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,6 +15,8 @@ export default function Login() {
     const [passwordType, setPasswordType] = useState("password");
     const [showPassword, setShowPassword] = useState(false);
 
+    const navigate = useNavigate();
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -21,19 +24,23 @@ export default function Login() {
             setError('All fields required.');
             return;
         }
-
         try {
             const data = await login(email, password);
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            window.location.href = "/incidents";
+
+            if (data.user.role === "admin") {
+                window.location.replace("/dashboard");
+            } else {
+                window.location.replace("/incidents");
+            }
         } catch (error) {
             setError(error.message);
         }
     };
 
     const handleSignUp = () => {
-        window.location.href = "/register";
+        navigate("/register");
     };
 
     const togglePasswordVisibility = () => {
