@@ -129,7 +129,7 @@ export default function IncidentDetails() {
                                 </div>
                             </div>
                         ) : (
-                            <span >{incidentDetails.status.replace("_", " ")}</span>
+                            <p className="text-status">{incidentDetails.status.replace("_", " ")}</p>
                         )}
                         <p className="text-date">{new Date(incidentDetails.created_at).toLocaleString()}</p>
                         {successMessage && <p className="text-success">{successMessage}</p>}
