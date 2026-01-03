@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { getIncidents } from '../services/api.js';
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
     const [incidents, setIncidents] = useState([]);
+
+    const navigate = useNavigate();
 
     const fetchIncidents = async () => {
         try {
@@ -64,7 +67,7 @@ export default function Dashboard() {
                             </div>
                         </div>
                         <p>{incident.description}</p>
-                        <p>
+                        <p className="text-status">
                             {incident.status.replace("_", " ")}
                         </p>
                         <p className="text-date">{new Date(incident.created_at).toLocaleString()}</p>
