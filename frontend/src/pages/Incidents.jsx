@@ -30,12 +30,14 @@ export default function Incidents() {
 
   return (
     <div className="incidents-page">
+      { !isUser && 
       <div>
         <button onClick={() => setFilteredIncidents(incidents)} className="filter-btn">All</button>
         <button onClick={() => filterBySeverity("LOW")} className="filter-btn">Low</button>
         <button onClick={() => filterBySeverity("MEDIUM")} className="filter-btn">Medium</button>
         <button onClick={() => filterBySeverity("HIGH")} className="filter-btn">High</button>
       </div>
+}
       {incidents.length === 0 ? (
         <p>No incidents available.</p>
       ) : (
@@ -52,7 +54,7 @@ export default function Incidents() {
 
             </div>
             <p>{incident.description}</p>
-            <p>
+            <p className="text-status">
               {incident.status.replace("_", " ")}
             </p>
             <p className="text-date">{new Date(incident.created_at).toLocaleString()}</p>
